@@ -3,8 +3,12 @@ import configparser
 import subprocess
 import time
 import logging
+import sqlite3
+import mcrcon
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
+conn = sqlite3.connect('cityarts.db')
+c = conn.cursor()
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -116,11 +120,28 @@ def report(bot, update):
                                   "Usage : /report [Text]")
 
 def welcome(bot, update):
-    update.message.reply_text("안녕하세요! 여러분의 친구, CityArts Official Bot 입니다.\n"
-                              "CityArts 의 서버원이 되신걸 진심으로 환영합니다!\n"
-                              "\n"
-                              "Hello, It's you're friend, CityArts Official Bot.\n"
-                              "Welcome to CityArts!")
+    if update.message.chat.id == config['GROUPS']['group_id']:
+        update.message.reply_text("안녕하세요! 여러분의 친구, CityArts Official Bot 입니다.\n"
+                                  "CityArts 의 서버원이 되신걸 진심으로 환영합니다!\n"
+                                  "화이트리스트 등록은 명령어 /whitelist 를 입력해주시면 감사드리겠습니다.\n"
+                                  "\n"
+                                  "Hello, It's you're friend, CityArts Official Bot.\n"
+                                  "Welcome to CityArts!"
+                                  "If you want to register whitelist, please enter command / whitelist.")
+    if update.message.chat.id == config['GROUPS']['ipa_group_id']:
+        update.message.reply_text("안녕하세요! 여러분의 친구, CityArts Official Bot 입니다.\n"
+                                  "IPA 수사관이 되신것을 진심으로 축하드립니다!\n"
+                                  "\n"
+                                  "Hello, It's you're friend, CityArts Official Bot.\n"
+                                  "Congratulations on being an IPA investigator!")
+    if update.message.chat.id == config['GROUPS']['public_group_id']:
+        update.message.reply_text("안녕하세요! 여러분의 친구, CityArts Official Bot 입니다.\n"
+                                  "CityArts 의 서버원이 되신걸 진심으로 환영합니다!\n"
+                                  "화이트리스트 등록은 명령어 /whitelist 를 입력해주시면 감사드리겠습니다.\n"
+                                  "\n"
+                                  "Hello, It's you're friend, CityArts Official Bot.\n"
+                                  "Welcome to CityArts!"
+                                  "If you want to register whitelist, please enter command / whitelist.")
     
 def wiki(bot, update):
     text = ' '.join(update.message.text.split()[1:])
@@ -143,6 +164,24 @@ def wiki(bot, update):
                                   "The above command is for searching documents.\n"
                                   "Usage : /wiki [Text]")
 
+def whitelist(bot, update):
+    rcon = mcrcon.MCRcon()
+    rcon.connect(config['RCON']['server_ip'], int(config['RCON']['server_port']), config['RCON']['server_password'])
+
+    user_list = ['']
+
+    while True:
+        response = rcon.command("whitelist list")
+        if response:
+            response = response.replace('§ePlayers in whitelist.txt: §f', '')
+            response = response.replace('§ePlayers in whitelist.txt: §f', '')
+            user_list = response.split(', ')
+            break
+
+    print(user_list)
+
+    rcon.disconnect()
+
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('stop', stop))
 dispatcher.add_handler(CommandHandler('help', help))
@@ -151,6 +190,7 @@ dispatcher.add_handler(CommandHandler('trains', trains))
 dispatcher.add_handler(CommandHandler('status', status))
 dispatcher.add_handler(CommandHandler('report', report))
 dispatcher.add_handler(CommandHandler('wiki', wiki))
+dispatcher.add_handler(CommandHandler('whitelist', whitelist))
 dispatcher.add_handler(MessageHandler([Filters.status_update.new_chat_members], welcome))
 
 updater.start_polling()
