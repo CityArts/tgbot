@@ -1,6 +1,6 @@
 <img align="left" width="64px" src="logo.jpg" />
 
-# CityArts Telegram Bot Service
+# CityArts Telegram Bot (@cityarts_bot)
 
 [![MIT][s1]][li]
 
@@ -9,6 +9,8 @@
 [li]: LICENSE
 
 CityArts Minecraft / Minetest Server Group management & Game management Bot
+
+## INTRODUCE
 
 Resource files by FrogIT & GrassLeaf123
 MCRon by https://github.com/barneygale/MCRcon
