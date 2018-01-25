@@ -1,0 +1,10 @@
+[KEYS]
+bot_api = 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
+
+[ADMIN]
+id = 12345678|87654321|13580123
+
+[GROUPS]
+group_id = -1234567890123
+public_group_id = -1234567890123
+ipa_group_id = -1234567890123
