@@ -9,3 +9,5 @@
 [li]: LICENSE
 
 CityArts Minecraft / Minetest Server Group management & Game management Bot
+
+Resource files by FrogIT & GrassLeaf123
