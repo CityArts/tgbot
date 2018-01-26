@@ -131,28 +131,28 @@ def report(bot, update):
                                   "Usage : /report [Text]")
 
 def welcome(bot, update):
-    if update.message.chat.id == config['GROUPS']['group_id']:
+    if int(update.message.chat.id) == int(config['GROUPS']['group_id']):
         update.message.reply_text("안녕하세요! 여러분의 친구, CityArts Official Bot 입니다.\n"
                                   "CityArts 의 서버원이 되신걸 진심으로 환영합니다!\n"
-                                  "화이트리스트 등록은 명령어 /whitelist 를 입력해주시면 감사드리겠습니다.\n"
+                                  "화이트리스트 등록은 명령어 /add 를 입력해주시면 감사드리겠습니다.\n"
                                   "\n"
                                   "Hello, It's you're friend, CityArts Official Bot.\n"
                                   "Welcome to CityArts!"
-                                  "If you want to register whitelist, please enter command / whitelist.")
-    if update.message.chat.id == config['GROUPS']['ipa_group_id']:
+                                  "If you want to register whitelist, please enter command /add.")
+    if int(update.message.chat.id) == int(config['GROUPS']['ipa_group_id']):
         update.message.reply_text("안녕하세요! 여러분의 친구, CityArts Official Bot 입니다.\n"
                                   "IPA 수사관이 되신것을 진심으로 축하드립니다!\n"
                                   "\n"
                                   "Hello, It's you're friend, CityArts Official Bot.\n"
                                   "Congratulations on being an IPA investigator!")
-    if update.message.chat.id == config['GROUPS']['public_group_id']:
+    if int(update.message.chat.id) == int(config['GROUPS']['public_group_id']):
         update.message.reply_text("안녕하세요! 여러분의 친구, CityArts Official Bot 입니다.\n"
                                   "CityArts 의 서버원이 되신걸 진심으로 환영합니다!\n"
-                                  "화이트리스트 등록은 명령어 /whitelist 를 입력해주시면 감사드리겠습니다.\n"
+                                  "화이트리스트 등록은 명령어 /add 를 입력해주시면 감사드리겠습니다.\n"
                                   "\n"
                                   "Hello, It's you're friend, CityArts Official Bot.\n"
                                   "Welcome to CityArts!"
-                                  "If you want to register whitelist, please enter command / whitelist.")
+                                  "If you want to register whitelist, please enter command /add.")
     
 def wiki(bot, update):
     text = ' '.join(update.message.text.split()[1:])
