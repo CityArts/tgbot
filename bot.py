@@ -1,3 +1,10 @@
+# =======================================================================
+#  Copyleft CityArtsTeam 2018-∞.
+#  Distributed under the terms of the MIT License.
+#  (See accompanying file LICENSE or copy at
+#   https://opensource.org/licenses/MIT)
+# =======================================================================
+
 import json, requests
 import configparser
 import subprocess
@@ -7,8 +14,8 @@ import sqlite3
 import mcrcon
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-conn = sqlite3.connect('cityarts.db')
-c = conn.cursor()
+# conn = sqlite3.connect('cityarts.db')
+# c = conn.cursor()
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -19,10 +26,14 @@ def error(bot, update, error):
 
 
 config = configparser.ConfigParser()
-config.read('bot.conf')
+config.read('bot.conf') ## Read Bot Config file
 
-updater = Updater(token=config['KEYS']['bot_api'])
+updater = Updater(token=config['KEYS']['bot_api']) ## Get updates from Telegram Bot API
 dispatcher = updater.dispatcher
+
+# -----------------------------------------------------
+#   Normal Commands
+# -----------------------------------------------------
 
 def start(bot, update):
     update.message.reply_text("안녕하세요! 여러분의 친구, CityArts Official Bot 입니다.\n"
@@ -106,7 +117,7 @@ def report(bot, update):
                                   "\n"
                                   "Your content has been sent to IPA.\n"
                                   "Thank you for reporting.")
-        bot.send_message(os.environ['IPA_GROUP_ID'], "여러분께 알립니다.\n"
+        bot.send_message(config['GROUPS']['ipa_group_id'], "여러분께 알립니다.\n"
                          "다음과 같은 제보가 들어왔습니다.\n"
                          "\n"
                          "사용자 이름 : " + update.message.from_user.first_name + " ( @" + update.message.from_user.username + " )\n"
@@ -164,34 +175,149 @@ def wiki(bot, update):
                                   "The above command is for searching documents.\n"
                                   "Usage : /wiki [Text]")
 
-def whitelist(bot, update):
-    rcon = mcrcon.MCRcon()
+def add(bot, update):
     rcon.connect(config['RCON']['server_ip'], int(config['RCON']['server_port']), config['RCON']['server_password'])
 
     user_list = ['']
 
+    response = rcon.command("whitelist list")
     while True:
-        response = rcon.command("whitelist list")
         if response:
             response = response.replace('§ePlayers in whitelist.txt: §f', '')
             response = response.replace('§ePlayers in whitelist.txt: §f', '')
             user_list = response.split(', ')
             break
 
-    print(user_list)
-
     rcon.disconnect()
 
-dispatcher.add_handler(CommandHandler('start', start))
-dispatcher.add_handler(CommandHandler('stop', stop))
-dispatcher.add_handler(CommandHandler('help', help))
-dispatcher.add_handler(CommandHandler('map', map))
-dispatcher.add_handler(CommandHandler('trains', trains))
-dispatcher.add_handler(CommandHandler('status', status))
-dispatcher.add_handler(CommandHandler('report', report))
-dispatcher.add_handler(CommandHandler('wiki', wiki))
-dispatcher.add_handler(CommandHandler('whitelist', whitelist))
-dispatcher.add_handler(MessageHandler([Filters.status_update.new_chat_members], welcome))
+# -----------------------------------------------------
+#   [Filters.text] Handler
+# -----------------------------------------------------
+
+def text(bot, update):
+    text = ' '.join(update.message.text.split()[:1])
+    isAdmin = False
+
+    for id in config['ADMIN']['id'].split("|"):
+        if int(id) == int(update.message.from_user.id):
+            isAdmin = True
+
+    if text == "!rcon":
+        rcon(bot, update, isAdmin)
+    elif text == "!reload":
+        reload(bot, update, isAdmin)
+    elif text == "!broadcast":
+        broadcast(bot, update, isAdmin)
+    elif text == "!restart":
+        restart(bot, update, isAdmin)
+
+# -----------------------------------------------------
+#   Administer ONLY Commands
+# -----------------------------------------------------
+
+def rcon(bot, update, isAdmin):
+    text = ' '.join(update.message.text.split()[1:])
+    command = ' '.join(text.split()[0:])
+
+    if isAdmin:
+        if text:
+            rcon = mcrcon.MCRcon()
+            rcon.connect(config['RCON']['server_ip'], int(config['RCON']['server_port']), config['RCON']['server_password'])
+            update.message.reply_text("해당 명령어를 실행중입니다...\n"
+                                      "Running this command...")
+
+            response = rcon.command(command)
+
+            update.message.reply_text("성공적으로 실행되었습니다.\n"
+                                      "Successfully executed.")
+
+            rcon.disconnect()
+        else:
+            update.message.reply_text("위 커맨드는 RCON 에서 명령어를 실행하는 명령어입니다.\n"
+                                      "사용법 : !rcon [내용]\n"
+                                      "\n"
+                                      "The above command is a command to execute command on RCON.\n"
+                                      "Usage : !rcon [Text]")
+    else:
+        update.message.reply_text("죄송합니다. 해당 명령어는 관리자만 수행할 수 있습니다.\n"
+                                  "Sorry. This command can only be executed by the administrator.")
+
+
+def reload(bot, update, isAdmin):
+    if isAdmin:
+        rcon = mcrcon.MCRcon()
+        rcon.connect(config['RCON']['server_ip'], int(config['RCON']['server_port']), config['RCON']['server_password'])
+        
+        update.message.reply_text("해당 명령어를 실행중입니다...\n"
+                                  "Running this command...")
+
+        response = rcon.command("reload")
+        while True:
+            if response:
+                update.message.reply_text("성공적으로 실행되었습니다.\n"
+                                          "Successfully executed.")
+                break
+        
+        rcon.disconnect()
+    else:
+        update.message.reply_text("죄송합니다. 해당 명령어는 관리자만 수행할 수 있습니다.\n"
+                                  "Sorry. This command can only be executed by the administrator.")
+
+def broadcast(bot, update, isAdmin):
+    text = ' '.join(update.message.text.split()[1:])
+
+    if isAdmin:
+        rcon = mcrcon.MCRcon()
+        rcon.connect(config['RCON']['server_ip'], int(config['RCON']['server_port']), config['RCON']['server_password'])
+        update.message.reply_text("해당 명령어를 실행중입니다...\n"
+                                  "Running this command...")
+
+        response = rcon.command("broadcast " + text)
+
+        update.message.reply_text("성공적으로 실행되었습니다.\n"
+                                  "Successfully executed.")
+
+        rcon.disconnect()
+    else:
+        update.message.reply_text("죄송합니다. 해당 명령어는 관리자만 수행할 수 있습니다.\n"
+                                  "Sorry. This command can only be executed by the administrator.")
+
+def restart(bot, update, isAdmin):
+    if isAdmin:
+        rcon = mcrcon.MCRcon()
+        rcon.connect(config['RCON']['server_ip'], int(config['RCON']['server_port']), config['RCON']['server_password'])
+        
+        update.message.reply_text("해당 명령어를 실행중입니다...\n"
+                                  "Running this command...")
+
+        response = rcon.command("restart")
+        while True:
+            if response:
+                update.message.reply_text("성공적으로 실행되었습니다.\n"
+                                          "Successfully executed.")
+                break
+
+        rcon.disconnect()
+    else:
+        update.message.reply_text("죄송합니다. 해당 명령어는 관리자만 수행할 수 있습니다.\n"
+                                  "Sorry. This command can only be executed by the administrator.")
+
+# -----------------------------------------------------
+#   Command Handler
+# -----------------------------------------------------
+
+dispatcher.add_handler(CommandHandler('start', start)) ## /start Command - Start CityArts Bot
+dispatcher.add_handler(CommandHandler('stop', stop)) ## /stop Command - Stop CityArts Bot
+dispatcher.add_handler(CommandHandler('help', help)) ## /help Command - Show help
+dispatcher.add_handler(CommandHandler('map', map)) ## /map Command - Show map
+dispatcher.add_handler(CommandHandler('trains', trains)) ## /trains Command - Show Railway route map
+dispatcher.add_handler(CommandHandler('status', status)) ## /status Command - Get server status
+dispatcher.add_handler(CommandHandler('server', status)) ## /server Command (Redirect to /status)
+dispatcher.add_handler(CommandHandler('report', report)) ## /report Command - Report a server problem to IPA
+dispatcher.add_handler(CommandHandler('wiki', wiki)) ## /wiki Command - Browse the documentation on the wiki
+dispatcher.add_handler(CommandHandler('add', add)) ## /add Command - Whitelist assistant
+dispatcher.add_handler(MessageHandler([Filters.text], text)) ## Administer only commands
+dispatcher.add_handler(MessageHandler([Filters.status_update.new_chat_members], welcome)) ## Show welcome message
 
 updater.start_polling()
 updater.idle()
