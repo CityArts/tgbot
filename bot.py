@@ -5,6 +5,8 @@
 #   https://opensource.org/licenses/MIT)
 # =======================================================================
 
+# https://github.com/barneygale/MCRcon
+
 import json, requests
 import configparser
 import subprocess
@@ -190,6 +192,20 @@ def add(bot, update):
 
     rcon.disconnect()
 
+def info(bot, update):
+    update.message.reply_text("무한한 자유로움을 드리는 자유 건축, 무한한 재미를 드리는 다양한 게임들이 한 곳에 모여있는 마인크래프트 멀티 컨텐츠 서버 CityArts에 오신 것을 환영합니다.\n"
+                              "Welcome to CityArts, a multi-content server with a limitless freedom on 'Free Creative' and a host of games for unlimited fun.\n"
+                              "\n"
+                              "커뮤니티법] http://telegra.ph/CityArts-커뮤니티법-제-3판-개정안-2018-01-22가-01-22\n"
+                              "마인크래프트 버전] 1.12.2\n"
+                              "서버 주소] cityarts.ga\n"
+                              "공지 채널] @cityartsch\n"
+                              "법률 목록] https://goo.gl/DteMBb\n"
+                              "실시간 지도] live.cityarts.ga\n"
+                              "위키] wiki.cityarts.ga\n"
+                              "전철 노선도] https://goo.gl/NjT3HU\n"
+                              "시티아트 지원] @CityArtsSupport")
+
 # -----------------------------------------------------
 #   [Filters.text] Handler
 # -----------------------------------------------------
@@ -210,6 +226,8 @@ def text(bot, update):
         broadcast(bot, update, isAdmin)
     elif text == "!restart":
         restart(bot, update, isAdmin)
+    elif text == "!chat":
+        chat(bot, update)
 
 # -----------------------------------------------------
 #   Administer ONLY Commands
@@ -263,6 +281,26 @@ def reload(bot, update, isAdmin):
         update.message.reply_text("죄송합니다. 해당 명령어는 관리자만 수행할 수 있습니다.\n"
                                   "Sorry. This command can only be executed by the administrator.")
 
+def chat(bot, update):
+    text = ' '.join(update.message.text.split()[1:])
+
+    if text:
+        rcon = mcrcon.MCRcon()
+        rcon.connect(config['RCON']['server_ip'], int(config['RCON']['server_port']), config['RCON']['server_password'])
+
+        response = rcon.command("say [" + update.message.from_user.first_name + "]" + " " + text)
+
+        update.message.reply_text("메시지를 보냈습니다.\n"
+                                  "Your message has been sent.")
+
+        rcon.disconnect()
+    else:
+        update.message.reply_text("위 커맨드는 서버에 메시지를 보낼 수 있습니다.\n"
+                                  "사용법 : !chat [내용]\n"
+                                  "\n"
+                                  "The above command can send a message to the server.\n"
+                                   "Usage : !chat [Text]")
+
 def broadcast(bot, update, isAdmin):
     text = ' '.join(update.message.text.split()[1:])
 
@@ -315,6 +353,7 @@ dispatcher.add_handler(CommandHandler('status', status)) ## /status Command - Ge
 dispatcher.add_handler(CommandHandler('server', status)) ## /server Command (Redirect to /status)
 dispatcher.add_handler(CommandHandler('report', report)) ## /report Command - Report a server problem to IPA
 dispatcher.add_handler(CommandHandler('wiki', wiki)) ## /wiki Command - Browse the documentation on the wiki
+dispatcher.add_handler(CommandHandler('info', info)) ## /info Command - Show server info
 dispatcher.add_handler(CommandHandler('add', add)) ## /add Command - Whitelist assistant
 dispatcher.add_handler(MessageHandler([Filters.text], text)) ## Administer only commands
 dispatcher.add_handler(MessageHandler([Filters.status_update.new_chat_members], welcome)) ## Show welcome message
