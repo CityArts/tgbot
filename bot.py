@@ -196,7 +196,7 @@ def info(bot, update):
     update.message.reply_text("무한한 자유로움을 드리는 자유 건축, 무한한 재미를 드리는 다양한 게임들이 한 곳에 모여있는 마인크래프트 멀티 컨텐츠 서버 CityArts에 오신 것을 환영합니다.\n"
                               "Welcome to CityArts, a multi-content server with a limitless freedom on 'Free Creative' and a host of games for unlimited fun.\n"
                               "\n"
-                              "커뮤니티법] http://telegra.ph/CityArts-커뮤니티법-제-3판-개정안-2018-01-22가-01-22\n"
+                              "커뮤니티법] https://wiki.cityarts.ga/w/커뮤니티법\n"
                               "마인크래프트 버전] 1.12.2\n"
                               "서버 주소] cityarts.ga\n"
                               "공지 채널] @cityartsch\n"
