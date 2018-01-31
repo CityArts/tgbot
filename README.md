@@ -2,9 +2,7 @@
 
 # CityArts Bot (@cityarts_bot)
 
-[![Join the chat at https://gitter.im/CityArts/bot](https://badges.gitter.im/CityArts/bot.svg)](https://gitter.im/CityArts/bot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![MIT][s1]][li]
+[![MIT][s1]][li] [![Join the chat at https://gitter.im/CityArts/bot](https://badges.gitter.im/CityArts/bot.svg)](https://gitter.im/CityArts/bot?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [s1]: https://img.shields.io/badge/License-MIT-blue.svg
 
