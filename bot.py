@@ -198,9 +198,8 @@ def add(bot, update):
                 response = response.replace('§ePlayers in whitelist.txt: §f', '')
                 user_list = response.split(', ')
 
-                for val in enumerate(user_list):
-                    if str(val) == str(text):
-                        logger.info(val)
+                for i, val in enumerate(user_list):
+                    if val == text:
                         is_already_register = True
                         break
 
