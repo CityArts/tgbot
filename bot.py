@@ -18,8 +18,12 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 # conn = sqlite3.connect('cityarts.db')
 # c = conn.cursor()
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+logging.basicConfig(filename=logname,
+                    filemode='a',
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    datefmt='%H:%M:%S',
                     level=logging.INFO)
+
 logger = logging.getLogger(__name__)
 
 
@@ -178,19 +182,54 @@ def wiki(bot, update):
                                   "Usage : /wiki [Text]")
 
 def add(bot, update):
-    rcon.connect(config['RCON']['server_ip'], int(config['RCON']['server_port']), config['RCON']['server_password'])
+    text = ' '.join(update.message.text.split()[1:])
 
-    user_list = ['']
+    if text:
+        rcon = mcrcon.MCRcon()
+        rcon.connect(config['RCON']['server_ip'], int(config['RCON']['server_port']), config['RCON']['server_password'])
 
-    response = rcon.command("whitelist list")
-    while True:
-        if response:
-            response = response.replace('§ePlayers in whitelist.txt: §f', '')
-            response = response.replace('§ePlayers in whitelist.txt: §f', '')
-            user_list = response.split(', ')
-            break
+        user_list = ['']
 
-    rcon.disconnect()
+        response = rcon.command("whitelist list")
+        is_already_register = False
+
+        while True:
+            if response:
+                response = response.replace('§ePlayers in whitelist.txt: §f', '')
+                response = response.replace('§ePlayers in whitelist.txt: §f', '')
+                user_list = response.split(', ')
+
+                for val in enumerate(user_list):
+                    if val == text:
+                        is_already_register = True
+                        break
+
+                break
+
+        if is_already_register:
+            logger.info("Whitelist failed: " + update.message.from_user.id + " | " + update.message.from_user.first_name + " " + text)
+
+            update.message.reply_text("죄송합니다. 이미 등록된 사용자인것같습니다.\n"
+                                      "혹시나 잘못 등록하셨다면 @CityArtsSupport 로 문의주시면 감사드리겠습니다.\n"
+                                      "Sorry. It looks like you're already a registered user.\n"
+                                      "If you have registered incorrectly, please contact us at @CityArtsSupport.")
+        else:
+            response = rcon.command("whitelist add " + text)
+
+            logger.info("Whitelist added: " + update.message.from_user.id + " | " + update.message.from_user.first_name + " " + text)
+
+            update.message.reply_text("등록되었습니다. CityArts에 오신걸 진심으로 축하드립니다!\n"
+                                      "혹시나 잘못 등록하셨다면 @CityArtsSupport 로 문의주시면 감사드리겠습니다.\n"
+                                      "Registered. Congratulations on your visit to CityArts!\n"
+                                      "If you have registered incorrectly, please contact us at @CityArtsSupport.")
+        
+        rcon.disconnect()
+    else:
+        update.message.reply_text("다음과 같은 명령어로 서버에 쉽게 등록할 수 있습니다.\n"
+                                  "사용법 : /chat [마인크래프트_닉네임]\n"
+                                  "\n"
+                                  "You can easily register to the server with the following command.\n"
+                                   "Usage : !chat [Minecraft_Nickname]")
 
 def info(bot, update):
     update.message.reply_text("무한한 자유로움을 드리는 자유 건축, 무한한 재미를 드리는 다양한 게임들이 한 곳에 모여있는 마인크래프트 멀티 컨텐츠 서버 CityArts에 오신 것을 환영합니다.\n"
@@ -205,6 +244,9 @@ def info(bot, update):
                               "위키] wiki.cityarts.ga\n"
                               "전철 노선도] https://goo.gl/NjT3HU\n"
                               "시티아트 지원] @CityArtsSupport")
+
+def ping(bot, update):
+    update.message.reply_text("Pong!")
 
 # -----------------------------------------------------
 #   [Filters.text] Handler
@@ -290,6 +332,8 @@ def chat(bot, update):
 
         response = rcon.command("say [" + update.message.from_user.first_name + "]" + " " + text)
 
+        logger.info("[" + update.message.from_user.id + " | " + update.message.from_user.first_name + "]" + " " + text)
+
         update.message.reply_text("메시지를 보냈습니다.\n"
                                   "Your message has been sent.")
 
@@ -355,6 +399,7 @@ dispatcher.add_handler(CommandHandler('report', report)) ## /report Command - Re
 dispatcher.add_handler(CommandHandler('wiki', wiki)) ## /wiki Command - Browse the documentation on the wiki
 dispatcher.add_handler(CommandHandler('info', info)) ## /info Command - Show server info
 dispatcher.add_handler(CommandHandler('add', add)) ## /add Command - Whitelist assistant
+dispatcher.add_handler(CommandHandler('ping', ping)) ## /ping Command - Check ping
 dispatcher.add_handler(MessageHandler([Filters.text], text)) ## Administer only commands
 dispatcher.add_handler(MessageHandler([Filters.status_update.new_chat_members], welcome)) ## Show welcome message
 
