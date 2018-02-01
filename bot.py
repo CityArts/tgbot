@@ -206,7 +206,7 @@ def add(bot, update):
                 break
 
         if is_already_register:
-            logger.info("Whitelist failed: " + update.message.from_user.id + " | " + update.message.from_user.first_name + " " + text)
+            logger.info("Whitelist failed: " + str(update.message.from_user.id) + " | " + update.message.from_user.first_name + " " + text)
 
             update.message.reply_text("죄송합니다. 이미 등록된 사용자인것같습니다.\n"
                                       "혹시나 잘못 등록하셨다면 @CityArtsSupport 로 문의주시면 감사드리겠습니다.\n"
@@ -215,7 +215,7 @@ def add(bot, update):
         else:
             response = rcon.command("whitelist add " + text)
 
-            logger.info("Whitelist added: " + update.message.from_user.id + " | " + update.message.from_user.first_name + " " + text)
+            logger.info("Whitelist added: " + str(update.message.from_user.id) + " | " + update.message.from_user.first_name + " " + text)
 
             update.message.reply_text("등록되었습니다. CityArts에 오신걸 진심으로 축하드립니다!\n"
                                       "혹시나 잘못 등록하셨다면 @CityArtsSupport 로 문의주시면 감사드리겠습니다.\n"
@@ -225,10 +225,10 @@ def add(bot, update):
         rcon.disconnect()
     else:
         update.message.reply_text("다음과 같은 명령어로 서버에 쉽게 등록할 수 있습니다.\n"
-                                  "사용법 : /chat [마인크래프트_닉네임]\n"
+                                  "사용법 : /add [마인크래프트_닉네임]\n"
                                   "\n"
                                   "You can easily register to the server with the following command.\n"
-                                   "Usage : !chat [Minecraft_Nickname]")
+                                   "Usage : /add [Minecraft_Nickname]")
 
 def info(bot, update):
     update.message.reply_text("무한한 자유로움을 드리는 자유 건축, 무한한 재미를 드리는 다양한 게임들이 한 곳에 모여있는 마인크래프트 멀티 컨텐츠 서버 CityArts에 오신 것을 환영합니다.\n"
@@ -331,7 +331,7 @@ def chat(bot, update):
 
         response = rcon.command("say [" + update.message.from_user.first_name + "]" + " " + text)
 
-        logger.info("[" + update.message.from_user.id + " | " + update.message.from_user.first_name + "]" + " " + text)
+        logger.info("[" + str(update.message.from_user.id) + " | " + update.message.from_user.first_name + "]" + " " + text)
 
         update.message.reply_text("메시지를 보냈습니다.\n"
                                   "Your message has been sent.")
