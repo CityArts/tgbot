@@ -18,8 +18,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 # conn = sqlite3.connect('cityarts.db')
 # c = conn.cursor()
-logging.basicConfig(filename=logname,
-                    filemode='a',
+logging.basicConfig(filemode='a',
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     datefmt='%H:%M:%S',
                     level=logging.INFO)
