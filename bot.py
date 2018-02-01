@@ -200,6 +200,7 @@ def add(bot, update):
 
                 for val in enumerate(user_list):
                     if val == text:
+                        print(val)
                         is_already_register = True
                         break
 
