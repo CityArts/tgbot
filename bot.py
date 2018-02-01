@@ -199,8 +199,8 @@ def add(bot, update):
                 user_list = response.split(', ')
 
                 for val in enumerate(user_list):
-                    if val == text:
-                        print(val)
+                    if str(val) == str(text):
+                        logger.info(val)
                         is_already_register = True
                         break
 
