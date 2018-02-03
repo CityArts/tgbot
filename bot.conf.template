@@ -8,3 +8,9 @@ id = 12345678|87654321|13580123
 group_id = -1234567890123
 public_group_id = -1234567890123
 ipa_group_id = -1234567890123
+admin_group_id = -1234567890123
+
+[RCON]
+server_ip = 123.123.123.123
+server_port = 25575
+server_password = password

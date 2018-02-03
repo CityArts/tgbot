@@ -62,7 +62,9 @@ def help(bot, update):
                               "/map - CityArts 서버의 지도를 표시합니다.\n"
                               "/trains - CityArts 서버의 철도 노선도를 표시합니다.\n"
                               "/report [문자] - IPA 에 서버의 문제점을 제보합니다.\n"
+                              "/request [문자] - 서버의 건의사항을 제출합니다.\n"
                               "/status - CityArts 서버의 상태를 표시합니다.\n"
+                              "!chat [문자] - 서버에 메시지를 보냅니다."
                               "\n"
                               "The CityArts Official Bot can be used as follows.\n"
                               "/start - Start CityArts Official Bot.\n"
@@ -71,7 +73,9 @@ def help(bot, update):
                               "/map - Displays a map of CityArts.\n"
                               "/trains - Displays a railway route map of CityArts.\n"
                               "/report [Text] - Report complaints to IPA.\n"
-                              "/status - Displays the status of CityArts.")
+                              "/request [Text] - Submit server suggestions.\n"
+                              "/status - Displays the status of CityArts.\n"
+                              "!chat [Text] - Sends a message to the server.")
 
 def map(bot, update):
     update.message.reply_photo(open("resources/map.jpg", 'rb'), 
@@ -134,6 +138,29 @@ def report(bot, update):
                                   "\n"
                                   "The above command is a command to report to IPA.\n"
                                   "Usage : /report [Text]")
+
+def request(bot, update):
+    text = ' '.join(update.message.text.split()[1:])
+
+    if text:
+        update.message.reply_text("건의사항이 전송 되었습니다.\n"
+                                  "제보해주셔서 감사드립니다.\n"
+                                  "\n"
+                                  "Your suggestion has been sent.\n"
+                                  "Thank you for reporting.")
+        bot.send_message(config['GROUPS']['admin_group_id'], "여러분께 알립니다.\n"
+                         "다음과 같은 건의가 들어왔습니다.\n"
+                         "\n"
+                         "사용자 이름 : " + update.message.from_user.first_name + " ( @" + update.message.from_user.username + " )\n"
+                         "내용 : " + text + "\n"
+                         "참고 부탁드리겠습니다 감사합니다.")
+    else:
+        update.message.reply_text("위 커맨드는 건의사항을 제출하기 위한 명령어입니다.\n"
+                                  "사용법 : /request [내용]\n"
+                                  "\n"
+                                  "The above command is for submitting suggestions.\n"
+                                  "Usage : /request [Text]")
+
 
 def welcome(bot, update):
     if int(update.message.chat.id) == int(config['GROUPS']['group_id']):
@@ -198,8 +225,9 @@ def add(bot, update):
                 response = response.replace('§ePlayers in whitelist.txt: §f', '')
                 user_list = response.split(', ')
 
-                for i, val in enumerate(user_list):
-                    if val == text:
+                for val in enumerate(user_list):
+                    if str(val) == str(text):
+                        logger.info(val)
                         is_already_register = True
                         break
 
@@ -395,6 +423,7 @@ dispatcher.add_handler(CommandHandler('trains', trains)) ## /trains Command - Sh
 dispatcher.add_handler(CommandHandler('status', status)) ## /status Command - Get server status
 dispatcher.add_handler(CommandHandler('server', status)) ## /server Command (Redirect to /status)
 dispatcher.add_handler(CommandHandler('report', report)) ## /report Command - Report a server problem to IPA
+dispatcher.add_handler(CommandHandler('request', request)) ## /request Command - Submitting server suggestions
 dispatcher.add_handler(CommandHandler('wiki', wiki)) ## /wiki Command - Browse the documentation on the wiki
 dispatcher.add_handler(CommandHandler('info', info)) ## /info Command - Show server info
 dispatcher.add_handler(CommandHandler('add', add)) ## /add Command - Whitelist assistant
