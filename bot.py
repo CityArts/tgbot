@@ -259,18 +259,20 @@ def add(bot, update):
                                    "Usage : /add [Minecraft_Nickname]")
 
 def info(bot, update):
-    update.message.reply_text("무한한 자유로움을 드리는 자유 건축, 무한한 재미를 드리는 다양한 게임들이 한 곳에 모여있는 마인크래프트 멀티 컨텐츠 서버 CityArts에 오신 것을 환영합니다.\n"
-                              "Welcome to CityArts, a multi-content server with a limitless freedom on 'Free Creative' and a host of games for unlimited fun.\n"
-                              "\n"
-                              "커뮤니티법] https://wiki.cityarts.ga/w/커뮤니티법\n"
-                              "마인크래프트 버전] 1.12.2\n"
-                              "서버 주소] cityarts.ga\n"
-                              "공지 채널] @cityartsch\n"
-                              "법률 목록] https://goo.gl/DteMBb\n"
-                              "실시간 지도] live.cityarts.ga\n"
-                              "위키] wiki.cityarts.ga\n"
-                              "전철 노선도] https://goo.gl/NjT3HU\n"
-                              "시티아트 지원] @CityArtsSupport")
+    update.message.reply_text("무한한 자유로움을 드리는 자유 건축, 여러분이 건축에 처음이신 분이시든, 건축을 잘하시는 분이시든 모두 재미있게 건축하실 수 있는 CityArts 서버입니다.\n"
+					"It is a free CityArts server that allows you to have fun, free architecture for infinite freedom, first time architects, and good architects.\n"
+					"\n"
+					"커뮤니티법] https://wiki.cityarts.ga/w/커뮤니티법\n"
+					"마인크래프트 버전] 1.12.2\n"
+					"서버 주소] cityarts.ga\n"
+					"시티아트 봇] @cityarts_bot\n"
+					"시티아트 공개] @cityarts\n"
+					"공지 채널] @cityartsch\n"
+					"법률 목록] https://goo.gl/DteMBb\n"
+					"실시간 지도] live.cityarts.ga\n"
+					"위키] wiki.cityarts.ga\n"
+					"전철 노선도] https://goo.gl/NjT3HU\n"
+					"시티아트 지원] @CityArtsSupport")
 
 def ping(bot, update):
     update.message.reply_text("Pong!")
@@ -295,6 +297,8 @@ def text(bot, update):
         broadcast(bot, update, isAdmin)
     elif text == "!restart":
         restart(bot, update, isAdmin)
+    elif text == "!dynmap":
+        fullrender(bot, update, isAdmin)
     elif text == "!chat":
         chat(bot, update)
 
@@ -349,6 +353,27 @@ def reload(bot, update, isAdmin):
     else:
         update.message.reply_text("죄송합니다. 해당 명령어는 관리자만 수행할 수 있습니다.\n"
                                   "Sorry. This command can only be executed by the administrator.")
+
+def fullrender(bot, update, isAdmin):
+    if isAdmin:
+        rcon = mcrcon.MCRcon()
+        rcon.connect(config['RCON']['server_ip'], int(config['RCON']['server_port']), config['RCON']['server_password'])
+        
+        update.message.reply_text("해당 명령어를 실행중입니다...\n"
+                                  "Running this command...")
+
+        response = rcon.command("dynmap fullrender")
+        while True:
+            if response:
+                update.message.reply_text("성공적으로 실행되었습니다.\n"
+                                          "Successfully executed.")
+                break
+        
+        rcon.disconnect()
+    else:
+        update.message.reply_text("죄송합니다. 해당 명령어는 관리자만 수행할 수 있습니다.\n"
+                                  "Sorry. This command can only be executed by the administrator.")
+
 
 def chat(bot, update):
     text = ' '.join(update.message.text.split()[1:])
