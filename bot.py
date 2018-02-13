@@ -362,7 +362,7 @@ def fullrender(bot, update, isAdmin):
         update.message.reply_text("해당 명령어를 실행중입니다...\n"
                                   "Running this command...")
 
-        response = rcon.command("dynmap fullrender")
+        response = rcon.command("dynmap fullrender world")
         while True:
             if response:
                 update.message.reply_text("성공적으로 실행되었습니다.\n"
