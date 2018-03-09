@@ -180,10 +180,12 @@ def welcome(bot, update):
     if int(update.message.chat.id) == int(config['GROUPS']['public_group_id']):
         update.message.reply_text("안녕하세요! 여러분의 친구, CityArts Official Bot 입니다.\n"
                                   "CityArts 의 서버원이 되신걸 진심으로 환영합니다!\n"
-                                  "화이트리스트 등록은 명령어 /add 를 입력해주시면 감사드리겠습니다.\n"
+				  "초보자 가이드를 먼저 읽어주세요: https://telegra.ph/CityArts-서버-초보자-가이드-02-10\n"
+                                  "화이트리스트 등록은 명령어 \"/add 마인크래프트 닉네임\" 을 입력해주세요.\n"
                                   "\n"
                                   "Hello, It's you're friend, CityArts Official Bot.\n"
-                                  "Welcome to CityArts!"
+                                  "Welcome to CityArts!\n"
+				  "Please read Beginner's Guide: https://telegra.ph/CityArts-서버-초보자-가이드-02-10\n"
                                   "If you want to register whitelist, please enter command /add.")
     
 def wiki(bot, update):
