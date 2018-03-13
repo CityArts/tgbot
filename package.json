@@ -1,0 +1,32 @@
+{
+  "name": "tgbot",
+  "version": "1.0.0",
+  "description": "<img align=\"left\" width=\"64px\" src=\"logo.jpg\" /> The CityArts Telegram Bot",
+  "main": "bot.js",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.30.0",
+    "read-yaml": "^1.1.0",
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5",
+    "parse-json": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^9.4.6",
+    "typescript": "^2.7.2"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build",
+    "start": "tsc && node dist/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CityArts/tgbot.git"
+  },
+  "author": "xuserwhat",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CityArts/tgbot/issues"
+  },
+  "homepage": "https://github.com/CityArts/tgbot#readme"
+}

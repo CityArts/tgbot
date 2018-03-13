@@ -16,5 +16,4 @@ This is a telegram bot used by CityArt (@cityarts) or another group.
 
 ## CONTRIBUTOR
 
-Resource files by FrogIT & GrassLeaf123 \
-MCRon by https://github.com/barneygale/MCRcon
+Resource files by FrogIT & GrassLeaf123 & Efrit \

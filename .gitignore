@@ -1,5 +1,18 @@
-bot.conf
-.vscode
-.idea
-__pycache__/
-cityarts.db
+# configuration
+bot.yml
+
+# compiled files
+dist
+
+# Dependency directories
+node_modules
+
+# Optional npm cache directory
+.npm
+
+# Debug stuff
+npm-debug.log
+
+# typings
+typings
+.env

@@ -1,0 +1,108 @@
+commands:
+    /start: |
+        안녕하세요! 여러분의 친구, <b>CityArts Official Bot</b> 입니다.
+        명령어를 보시려면 /help 를 입력해주시면 감사하겠습니다!
+
+        Hello, It's you're friend, <b>CityArts Official Bot</b>.
+        If you want see commands, please send /help thanks!
+    /stop: |
+        <b>CityArts Official Bot</b> 을 정지합니다.
+        다시 시작하시려면 /start 를 입력해주시면 감사하겠습니다.
+
+        Stopping <b>CityArts Official Bot</b>.
+        if you want restart, please enter /start.
+    /help: |
+        <b>CityArts Official Bot</b> 은 다음과 같이 사용할 수 있습니다.
+        /start - CityArts Official Bot 을 시작합니다.
+        /stop - CityArts Official Bot 를 중지합니다.
+        /help - CityArts Official Bot 의 도움말을 표시합니다.
+        /map - CityArts 서버의 지도를 표시합니다.
+        /trains - CityArts 서버의 철도 노선도를 표시합니다.
+        /report [문자] - IPA 에 서버의 문제점을 제보합니다.
+        /request [문자] - 서버의 건의사항을 제출합니다.
+        /status - CityArts 서버의 상태를 표시합니다.
+        /chat [문자] - 서버에 메시지를 보냅니다.
+
+        <b>The CityArts Official Bot</b> can be used as follows.
+        /start - Start CityArts Official Bot.
+        /stop - Stop CityArts Official Bot.
+        /help - Displays help for CityArts Official Bot.
+        /map - Displays a map of CityArts.
+        /trains - Displays a railway route map of CityArts.
+        /report [Text] - Report complaints to IPA.
+        /request [Text] - Submit server suggestions.
+        /status - Displays the status of CityArts.
+        /chat [Text] - Sends a message to the server.
+    /map: |
+        다음은 <b>CityArts</b> 의 지도입니다.
+        실시간 지도 확인은 live.cityarts.ga 에서 하실 수 있습니다.
+        Here is a map of <b>CityArts</b>.
+        Real-time map confirmation is available at live.cityarts.ga.
+    /trains: |
+        다음은 CityArts 의 철도 노선도 입니다.
+        Here is a railroad map of CityArts.
+    /report: |
+        <b>IPA</b> 로 해당 내용이 <b>전송</b>되었습니다.
+        제보해주셔서 감사드립니다.
+        
+        Your <b>content</b> has been sent to <b>IPA</b>.
+        Thank you for reporting.
+    /report_no_match: |
+        위 커맨드는 <b>IPA</b>에 <b>제보</b>하기 위한 명령어입니다.
+        사용법 : /report [내용]
+
+        The above command is a command to <b>report</b> to <b>IPA</b>.
+        Usage : /report [Text]
+    /report_group: |
+        여러분께 알립니다.
+        다음과 같은 <b>제보</b>가 들어왔습니다.
+
+        사용자 이름 : msg.from.first_name ( @msg.from.username )
+        내용 : resp
+        참고 부탁드리겠습니다 감사합니다.
+    /request: |
+        건의사항이 전송 되었습니다.
+        제보해주셔서 감사드립니다.
+
+        Your suggestion has been sent.
+        Thank you for reporting.
+    /request_no_match: |
+        위 커맨드는 <b>건의사항</b> 을 제출하기 위한 명령어입니다.
+        사용법 : /request [내용]
+        
+        The above command is for submitting <b>suggestions</b>.
+        Usage : /request [Text]
+    /request_group: |
+        여러분께 알립니다.
+        다음과 같은 <b>건의</b> 가 들어왔습니다.
+
+        사용자 이름 : msg.from.first_name ( @msg.from.username )
+        내용 : resp
+        참고 부탁드리겠습니다 감사합니다.
+    /status: |
+        서버 주소 : cityarts.ga
+        서버 상태 : online
+        플레이어 : players_max / players_now
+        서버 버전 : server_name
+        
+        Server Address : cityarts.ga
+        Server Status : online
+        Players : players_max / players_now
+        Server Version : server_name
+    /wiki: |
+        link 에서 <b>해당 문서</b> 를 보실 수 있습니다.
+        You can find <b>this document</b> in link.
+    /wiki_no_find: |
+        죄송합니다. <b>search 문서</b> 를 찾을 수 없습니다.
+        Sorry. <b>search Document</b> not found
+    /wiki_no_match: |
+        위 커맨드는 <b>문서</b>를 검색하기 위한 명령어입니다.
+        사용법 : /wiki [내용]
+
+        The above command is for searching <b>documents</b>.
+        Usage : /wiki [Text]
+    err: |
+        Sorry. Looks like something went wrong.
+        <b>Error information</b>: err
+
+        Please use the /bug command.

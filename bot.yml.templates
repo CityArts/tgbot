@@ -1,0 +1,22 @@
+telegram:
+  token: TOKEN_HERE
+  admin_id:
+    - 000000000
+  group_id:
+    main_group_id: -0000000000000
+    public_group_id: -0000000000000
+    report_group_id: -0000000000000
+    request_group_id: -0000000000000
+  username: my_bot
+rcon:
+  server_ip: localhost
+  server_port: 25575
+  server_password: admin
+server:
+  server_address: mysite.com
+  wiki_address: wiki.mysite.com
+db:
+  db_path: bot.db
+resources:
+  /map_path: resources/map.png
+  /trains_path: resources/trains_map.jpg
