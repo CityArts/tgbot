@@ -9,6 +9,7 @@ const token: string = config['telegram']['token'];
 const username: string = config['telegram']['username'];
 const server_address: string = config['server']['server_address'];
 const wiki_address: string = config['server']['wiki_address'];
+const live_address: string = config['server']['live_address'];
 const admins: Array<number> = config['telegram']['admin_id'];
 const report_group_id: number = config['telegram']['group_id']['report_group_id'];
 const request_group_id: number = config['telegram']['group_id']['request_group_id'];
@@ -27,7 +28,8 @@ class Bot {
         bot.onText(/\/(map|trains)(|@cityarts_bot)/, (msg: any, match: any) => {
             const chatId: number = msg.chat.id;
             let command: string = match[0].split(/@| /)[0];
-            let reply: string = commands['commands'][command];
+            let reply: string = commands['commands'][command]
+                .replace(/live_address/g, live_address);
             let photo: string = config['resources'][`${command}_path`];
 
             bot.sendPhoto(chatId, photo, {caption: reply, parse_mode : "HTML"});
@@ -68,6 +70,7 @@ class Bot {
                         .replace(/true/g, "✅")
                         .replace(/false/g, "❎");
                     reply = commands['commands'][command]
+                        .replace(/server_address/g, server_address)
                         .replace(/online/g, online)
                         .replace(/players_max/g, json['players']['max'])
                         .replace(/players_now/g, json['players']['now'])
@@ -92,10 +95,9 @@ class Bot {
                 reply = commands['commands'][`${command}_no_match`];
                 bot.sendMessage(chatId, reply, {parse_mode : "HTML"});
             } else {
-                // TODO: Fix 400 Error
                 rp(`https://${wiki_address}/search/${search}`)
                 .then(function (data: any) {
-                    if (data.indexOf('문서가 없습니다.')) {
+                    if (data.indexOf('문서가 없습니다.') != -1) {
                         reply = commands['commands'][`${command}_no_find`]
                             .replace(/search/g, search);
                     } else {
@@ -108,7 +110,7 @@ class Bot {
                                 .replace(/err/g, err);
                 })
                 .finally(function () {
-                    bot.sendMessage(chatId, reply);
+                    bot.sendMessage(chatId, reply, {parse_mode : "HTML"});
                 });
             }
         });
@@ -117,13 +119,7 @@ class Bot {
     }
 
     static checkReportCommand(command: string): number {
-        if (command == "/report") {
-            return report_group_id;
-        } else if (command == "/request") {
-            return request_group_id;
-        }
-
-        return 0;
+        return command == "/report" ? report_group_id : request_group_id;
     }
 }
 

@@ -4,11 +4,12 @@
   "description": "<img align=\"left\" width=\"64px\" src=\"logo.jpg\" /> The CityArts Telegram Bot",
   "main": "bot.js",
   "dependencies": {
+    "@types/node-telegram-bot-api": "^0.28.2",
     "node-telegram-bot-api": "^0.30.0",
+    "parse-json": "^4.0.0",
     "read-yaml": "^1.1.0",
     "request": "^2.83.0",
-    "request-promise-native": "^1.0.5",
-    "parse-json": "^4.0.0"
+    "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
     "@types/node": "^9.4.6",

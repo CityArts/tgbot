@@ -35,9 +35,9 @@ commands:
         /chat [Text] - Sends a message to the server.
     /map: |
         다음은 <b>CityArts</b> 의 지도입니다.
-        실시간 지도 확인은 live.cityarts.ga 에서 하실 수 있습니다.
+        실시간 지도 확인은 live_address 에서 하실 수 있습니다.
         Here is a map of <b>CityArts</b>.
-        Real-time map confirmation is available at live.cityarts.ga.
+        Real-time map confirmation is available at live_address.
     /trains: |
         다음은 CityArts 의 철도 노선도 입니다.
         Here is a railroad map of CityArts.
@@ -80,14 +80,14 @@ commands:
         내용 : resp
         참고 부탁드리겠습니다 감사합니다.
     /status: |
-        서버 주소 : cityarts.ga
+        서버 주소 : server_address
         서버 상태 : online
-        플레이어 : players_max / players_now
+        플레이어 : players_now / players_max
         서버 버전 : server_name
         
-        Server Address : cityarts.ga
+        Server Address : server_address
         Server Status : online
-        Players : players_max / players_now
+        Players :  players_now / players_max
         Server Version : server_name
     /wiki: |
         link 에서 <b>해당 문서</b> 를 보실 수 있습니다.
